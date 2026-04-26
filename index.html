@@ -2,517 +2,238 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CAJUPAR · Cobrança Diária Gerentes</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>CAJUPAR · Cobrança Diária</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
 
-  :root {
-    --orange: #E67E22;
-    --orange-light: #F5A623;
-    --black: #1A1A1A;
-    --beige: #FDF6EC;
-    --beige-dark: #F0E6D3;
-    --green: #27AE60;
-    --red: #C0392B;
-    --gray: #6B6B6B;
-    --border: #D9CFC4;
-    --white: #FFFFFF;
-    --text: #1A1A1A;
-    --text-muted: #7A7169;
-  }
+:root {
+  --orange: #E67E22;
+  --black: #1A1A1A;
+  --beige: #FDF6EC;
+  --beige-dark: #F0E6D3;
+  --green: #27AE60;
+  --red: #C0392B;
+  --border: #D9CFC4;
+  --white: #FFFFFF;
+  --text: #1A1A1A;
+  --muted: #7A7169;
+  --bg: #F5EDE0;
+}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-  body {
-    font-family: 'IBM Plex Sans', sans-serif;
-    background: #F7F0E6;
-    color: var(--text);
-    min-height: 100vh;
-  }
+body {
+  font-family: 'IBM Plex Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 15px;
+}
 
-  /* TOP BAR */
-  .topbar {
-    background: var(--black);
-    border-bottom: 3px solid var(--orange);
-    padding: 0 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 56px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .topbar-brand {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--white);
-    letter-spacing: 0.08em;
-  }
-  .topbar-brand span { color: var(--orange); }
-  .topbar-date {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    color: var(--orange);
-  }
+.topbar {
+  background: var(--black);
+  border-bottom: 3px solid var(--orange);
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.topbar-brand { font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; color: #fff; letter-spacing: 0.06em; }
+.topbar-brand span { color: var(--orange); }
+.topbar-right { display: flex; align-items: center; gap: 8px; }
+.topbar-setor { font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; padding: 3px 10px; border-radius: 999px; letter-spacing: 0.08em; }
+.setor-cpd { background: #8E44AD; color: #fff; }
+.setor-front { background: #2980B9; color: #fff; }
+.setor-back { background: #16A085; color: #fff; }
+.topbar-date { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--orange); }
 
-  /* PROGRESS */
-  .progress-wrap {
-    background: var(--black);
-    padding: 0 2rem 12px;
-    border-bottom: 1px solid #333;
-  }
-  .progress-labels {
-    display: flex;
-    justify-content: space-between;
-    font-size: 11px;
-    color: #888;
-    font-family: 'IBM Plex Mono', monospace;
-    margin-bottom: 6px;
-  }
-  .progress-bar {
-    height: 2px;
-    background: #333;
-    border-radius: 2px;
-    overflow: hidden;
-  }
-  .progress-fill {
-    height: 100%;
-    background: var(--orange);
-    border-radius: 2px;
-    transition: width 0.4s ease;
-  }
+.progress-wrap { background: #111; padding: 8px 1rem; border-bottom: 1px solid #2a2a2a; }
+.progress-labels { display: flex; justify-content: space-between; font-size: 10px; color: #666; font-family: 'IBM Plex Mono', monospace; margin-bottom: 5px; }
+.progress-bar { height: 2px; background: #333; border-radius: 2px; }
+.progress-fill { height: 100%; background: var(--orange); border-radius: 2px; transition: width 0.4s ease; }
 
-  /* LAYOUT */
-  .container {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 2rem 1.5rem;
-  }
+.container { max-width: 640px; margin: 0 auto; padding: 1.25rem 1rem; }
 
-  /* SCREEN */
-  .screen { display: none; }
-  .screen.active { display: block; }
+.screen { display: none; }
+.screen.active { display: block; animation: fadeUp 0.2s ease; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* QUESTION CARD */
-  .q-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-left: 4px solid var(--orange);
-    border-radius: 6px;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    animation: slideIn 0.25s ease;
-  }
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+.welcome { text-align: center; padding: 2rem 0.5rem; }
+.welcome-logo { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: var(--orange); letter-spacing: 0.12em; margin-bottom: 10px; }
+.welcome h1 { font-size: 24px; font-weight: 600; margin-bottom: 6px; line-height: 1.2; }
+.welcome p { font-size: 13px; color: var(--muted); margin-bottom: 1.5rem; line-height: 1.6; }
+.welcome-date { display: inline-block; background: var(--beige-dark); border: 1px solid var(--border); border-radius: 4px; padding: 5px 14px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--orange); margin-bottom: 1.5rem; }
 
-  .q-secao {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--orange);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .badge {
-    font-size: 9px;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 999px;
-    letter-spacing: 0.08em;
-  }
-  .badge-alerta { background: #FDEDEC; color: #C0392B; }
-  .badge-ok { background: #EAFAF1; color: #1E8449; }
+.sector-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 1.5rem; }
+.sector-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 8px; padding: 1rem 1.25rem; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 14px; text-align: left; }
+.sector-card:hover, .sector-card:active { border-color: var(--orange); background: var(--beige); transform: translateY(-1px); }
+.sector-icon { width: 42px; height: 42px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.icon-cpd { background: #F3E5F5; }
+.icon-front { background: #E3F2FD; }
+.icon-back { background: #E0F2F1; }
+.sector-info h3 { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+.sector-info p { font-size: 12px; color: var(--muted); }
 
-  .q-pergunta {
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--text);
-    line-height: 1.5;
-    margin-bottom: 1.25rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--beige-dark);
-  }
+.nome-wrap { background: var(--white); border: 1px solid var(--border); border-left: 4px solid var(--orange); border-radius: 6px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.nome-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; color: var(--orange); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; display: block; }
+.nome-input { width: 100%; padding: 10px 12px; font-size: 15px; font-family: 'IBM Plex Sans', sans-serif; color: var(--text); background: var(--beige); border: 1px solid var(--border); border-radius: 4px; }
+.nome-input:focus { outline: none; border-color: var(--orange); }
 
-  .campo-wrap { margin-bottom: 1rem; }
-  .campo-label {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-muted);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin-bottom: 5px;
-    display: block;
-    font-family: 'IBM Plex Mono', monospace;
-  }
-  textarea, input[type="text"] {
-    width: 100%;
-    padding: 10px 12px;
-    font-size: 14px;
-    font-family: 'IBM Plex Sans', sans-serif;
-    color: var(--text);
-    background: var(--beige);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    resize: vertical;
-    min-height: 72px;
-    line-height: 1.6;
-    transition: border-color 0.2s;
-  }
-  textarea:focus, input[type="text"]:focus {
-    outline: none;
-    border-color: var(--orange);
-    background: #FFFDF9;
-  }
+.q-card { background: var(--white); border: 1px solid var(--border); border-left: 4px solid var(--orange); border-radius: 6px; padding: 1.1rem; margin-bottom: 1rem; }
+.q-secao { font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; color: var(--orange); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 5px; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.badge { font-size: 9px; font-weight: 600; padding: 2px 7px; border-radius: 999px; letter-spacing: 0.06em; }
+.badge-alerta { background: #FDEDEC; color: #C0392B; }
+.badge-ok { background: #EAFAF1; color: #1E8449; }
+.q-pergunta { font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.5; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--beige-dark); }
 
-  /* NAVIGATION */
-  .nav {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 1.5rem;
-  }
-  .btn {
-    padding: 10px 22px;
-    font-size: 14px;
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 500;
-    border-radius: 4px;
-    cursor: pointer;
-    border: none;
-    transition: all 0.15s;
-  }
-  .btn:hover { opacity: 0.85; }
-  .btn-next { background: var(--orange); color: #fff; }
-  .btn-back { background: #fff; color: var(--text-muted); border: 1px solid var(--border); }
-  .btn-skip {
-    font-size: 12px;
-    color: var(--text-muted);
-    background: none;
-    border: none;
-    cursor: pointer;
-    margin-left: auto;
-    padding: 0;
-    font-family: 'IBM Plex Sans', sans-serif;
-  }
-  .btn-skip:hover { color: var(--text); }
+.campo-wrap { margin-bottom: 0.9rem; }
+.campo-label { font-size: 10px; font-weight: 600; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 5px; display: block; font-family: 'IBM Plex Mono', monospace; }
 
-  /* SUMMARY */
-  .summary-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    overflow: hidden;
-    margin-bottom: 1.5rem;
-  }
-  .summary-item {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--beige-dark);
-    display: flex;
-    gap: 12px;
-  }
-  .summary-item:last-child { border-bottom: none; }
-  .summary-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--orange);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    min-width: 140px;
-    padding-top: 2px;
-  }
-  .summary-value {
-    font-size: 13px;
-    color: var(--text);
-    line-height: 1.6;
-    flex: 1;
-    white-space: pre-wrap;
-  }
-  .summary-value.vazio { color: var(--text-muted); font-style: italic; }
+.quick-btns { display: flex; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
+.qbtn { font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 999px; cursor: pointer; border: 1.5px solid transparent; font-family: 'IBM Plex Sans', sans-serif; transition: all 0.15s; }
+.qbtn:active { transform: scale(0.95); }
+.qbtn-ok { background: #EAFAF1; color: #1E8449; border-color: #A9DFBF; }
+.qbtn-ok.active { background: #27AE60; color: #fff; border-color: #27AE60; }
+.qbtn-falha { background: #FDEDEC; color: #C0392B; border-color: #F1948A; }
+.qbtn-falha.active { background: #C0392B; color: #fff; border-color: #C0392B; }
+.qbtn-alerta { background: #FEF9E7; color: #B7770D; border-color: #F9E79F; }
+.qbtn-alerta.active { background: #F39C12; color: #fff; border-color: #F39C12; }
+.qbtn-na { background: #F4F6F7; color: #666; border-color: #D5D8DC; }
+.qbtn-na.active { background: #555; color: #fff; border-color: #555; }
 
-  /* PRINT / PDF PAGE */
-  .pdf-page {
-    display: none;
-    background: white;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11pt;
-    color: #1A1A1A;
-    padding: 30mm 20mm;
-    max-width: 210mm;
-    margin: 0 auto;
-  }
+textarea { width: 100%; padding: 9px 11px; font-size: 14px; font-family: 'IBM Plex Sans', sans-serif; color: var(--text); background: var(--beige); border: 1px solid var(--border); border-radius: 4px; resize: vertical; min-height: 68px; line-height: 1.6; transition: border-color 0.2s; }
+textarea:focus { outline: none; border-color: var(--orange); background: #FFFDF9; }
 
-  .pdf-header {
-    background: #1A1A1A;
-    color: #fff;
-    padding: 12px 20px;
-    margin-bottom: 4px;
-    display: flex;
-    align-items: center;
-    gap: 0;
-  }
-  .pdf-header-stripe {
-    width: 8px;
-    background: #E67E22;
-    align-self: stretch;
-    margin-right: 16px;
-    flex-shrink: 0;
-  }
-  .pdf-header-title {
-    font-size: 13pt;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    flex: 1;
-    text-align: center;
-  }
-  .pdf-date {
-    font-size: 9pt;
-    color: #E67E22;
-    text-align: right;
-    margin-bottom: 20px;
-    font-family: 'IBM Plex Mono', monospace;
-  }
-  .pdf-red-line {
-    height: 2px;
-    background: #C0392B;
-    margin-bottom: 6px;
-  }
-  .pdf-section {
-    margin-bottom: 16px;
-    break-inside: avoid;
-  }
-  .pdf-section-header {
-    background: #1A1A1A;
-    display: flex;
-    align-items: stretch;
-    margin-bottom: 0;
-  }
-  .pdf-section-stripe {
-    width: 6px;
-    background: #E67E22;
-    flex-shrink: 0;
-  }
-  .pdf-section-title {
-    color: #E67E22;
-    font-size: 9pt;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 6px 12px;
-    flex: 1;
-  }
-  .pdf-section-badge {
-    font-size: 8pt;
-    font-weight: 600;
-    padding: 4px 14px;
-    letter-spacing: 0.08em;
-    align-self: center;
-    margin-right: 6px;
-    border-radius: 999px;
-  }
-  .pdf-badge-ok { background: #27AE60; color: #fff; }
-  .pdf-badge-alerta { background: #C0392B; color: #fff; }
-  .pdf-badge-falha { background: #C0392B; color: #fff; }
-  .pdf-content {
-    background: #FDF6EC;
-    border-left: 4px solid #E67E22;
-    padding: 10px 14px;
-    font-size: 9.5pt;
-    line-height: 1.7;
-    color: #1A1A1A;
-    white-space: pre-wrap;
-  }
-  .pdf-content.vazio { color: #999; font-style: italic; }
-  .pdf-field-label {
-    font-size: 8pt;
-    font-weight: 600;
-    color: #E67E22;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-top: 6px;
-    margin-bottom: 1px;
-  }
-  .pdf-divider { height: 1px; background: #D9CFC4; margin: 4px 0; }
-  .pdf-footer {
-    margin-top: 30px;
-    border-top: 1px solid #E67E22;
-    padding-top: 8px;
-    display: flex;
-    justify-content: space-between;
-    font-size: 8pt;
-    color: #999;
-    font-family: 'IBM Plex Mono', monospace;
-  }
+.autosave { font-size: 10px; color: var(--green); font-family: 'IBM Plex Mono', monospace; text-align: right; margin-bottom: 4px; min-height: 14px; }
 
-  /* GENERATE BTN */
-  .btn-generate {
-    width: 100%;
-    padding: 14px;
-    background: var(--black);
-    color: #fff;
-    font-size: 15px;
-    font-weight: 500;
-    font-family: 'IBM Plex Sans', sans-serif;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 1rem;
-    letter-spacing: 0.02em;
-    transition: background 0.2s;
-  }
-  .btn-generate:hover { background: #333; }
-  .btn-novo {
-    width: 100%;
-    padding: 12px;
-    background: #fff;
-    color: var(--text-muted);
-    font-size: 14px;
-    font-family: 'IBM Plex Sans', sans-serif;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 8px;
-  }
+.nav { display: flex; align-items: center; gap: 8px; margin-top: 1rem; }
+.btn { padding: 10px 20px; font-size: 14px; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; border-radius: 5px; cursor: pointer; border: none; transition: all 0.15s; touch-action: manipulation; }
+.btn:active { transform: scale(0.97); }
+.btn-next { background: var(--orange); color: #fff; }
+.btn-back { background: #fff; color: var(--muted); border: 1px solid var(--border); }
+.btn-skip { font-size: 12px; color: var(--muted); background: none; border: none; cursor: pointer; margin-left: auto; font-family: 'IBM Plex Sans', sans-serif; padding: 4px; }
 
-  /* PRINT STYLES */
-  @media print {
-    body > *:not(#pdf-output) { display: none !important; }
-    #pdf-output { display: block !important; margin: 0; padding: 0; }
-    .pdf-page { display: block !important; padding: 15mm; }
-    @page { margin: 0; size: A4; }
-  }
+.summary-card { background: var(--white); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 1rem; }
+.summary-setor-header { background: var(--black); padding: 8px 14px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; color: var(--orange); letter-spacing: 0.1em; text-transform: uppercase; }
+.summary-item { padding: 10px 14px; border-bottom: 1px solid var(--beige-dark); }
+.summary-item:last-child { border-bottom: none; }
+.summary-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; font-weight: 600; color: var(--orange); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px; }
+.summary-value { font-size: 13px; color: var(--text); line-height: 1.5; white-space: pre-wrap; }
+.summary-value.vazio { color: var(--muted); font-style: italic; }
 
-  /* WELCOME */
-  .welcome {
-    text-align: center;
-    padding: 3rem 1rem;
-    animation: slideIn 0.3s ease;
-  }
-  .welcome-logo {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    color: var(--orange);
-    margin-bottom: 8px;
-  }
-  .welcome h1 {
-    font-size: 26px;
-    font-weight: 600;
-    color: var(--black);
-    margin-bottom: 8px;
-    line-height: 1.2;
-  }
-  .welcome p {
-    font-size: 14px;
-    color: var(--text-muted);
-    margin-bottom: 2rem;
-    line-height: 1.6;
-  }
-  .welcome-date {
-    display: inline-block;
-    background: var(--beige-dark);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 6px 16px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 13px;
-    color: var(--orange);
-    margin-bottom: 2rem;
-  }
-  .btn-start {
-    background: var(--orange);
-    color: #fff;
-    font-size: 16px;
-    font-weight: 500;
-    padding: 14px 40px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: 'IBM Plex Sans', sans-serif;
-    transition: background 0.2s;
-    display: block;
-    margin: 0 auto;
-  }
-  .btn-start:hover { background: #cf6d17; }
+.btn-generate { width: 100%; padding: 14px; background: var(--black); color: #fff; font-size: 15px; font-weight: 500; font-family: 'IBM Plex Sans', sans-serif; border: none; border-radius: 5px; cursor: pointer; margin-top: 0.75rem; }
+.btn-generate:active { transform: scale(0.98); }
+.btn-novo { width: 100%; padding: 11px; background: #fff; color: var(--muted); font-size: 14px; font-family: 'IBM Plex Sans', sans-serif; border: 1px solid var(--border); border-radius: 5px; cursor: pointer; margin-top: 8px; }
 
-  .counter-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--beige-dark);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 4px 12px;
-    font-size: 12px;
-    color: var(--text-muted);
-    margin-bottom: 1rem;
-    font-family: 'IBM Plex Mono', monospace;
-  }
-  .counter-dot {
-    width: 6px; height: 6px;
-    background: var(--orange);
-    border-radius: 50%;
-    display: inline-block;
-  }
+.draft-banner { background: #FEF9E7; border: 1px solid #F9E79F; border-radius: 6px; padding: 10px 14px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.draft-banner p { font-size: 12px; color: #7D6608; line-height: 1.4; }
+.draft-banner p strong { display: block; font-size: 11px; margin-bottom: 2px; }
+.draft-btns { display: flex; gap: 6px; flex-shrink: 0; }
+.btn-draft-continuar { font-size: 12px; font-weight: 600; padding: 6px 12px; background: var(--orange); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-family: 'IBM Plex Sans', sans-serif; }
+.btn-draft-descartar { font-size: 12px; padding: 6px 10px; background: none; color: var(--muted); border: 1px solid var(--border); border-radius: 4px; cursor: pointer; font-family: 'IBM Plex Sans', sans-serif; }
+
+@media print {
+  body > *:not(#pdf-output) { display: none !important; }
+  #pdf-output { display: block !important; }
+  .pdf-page { display: block !important; }
+  @page { margin: 15mm; size: A4; }
+}
+#pdf-output { display: none; }
+.pdf-page { font-family: 'IBM Plex Mono', monospace; font-size: 9.5pt; color: #1A1A1A; background: white; }
+.pdf-header { background: #1A1A1A; display: flex; align-items: stretch; margin-bottom: 3px; }
+.pdf-header-stripe { width: 7px; background: #E67E22; flex-shrink: 0; }
+.pdf-header-body { flex: 1; padding: 10px 14px; }
+.pdf-header-title { color: #fff; font-size: 12pt; font-weight: 600; letter-spacing: 0.05em; }
+.pdf-header-sub { color: #E67E22; font-size: 8pt; margin-top: 2px; }
+.pdf-redline { height: 2px; background: #C0392B; margin-bottom: 10px; }
+.pdf-gerente { background: #1A1A1A; color: #fff; padding: 5px 12px; display: flex; justify-content: space-between; font-size: 8pt; margin-bottom: 10px; }
+.pdf-section { margin-bottom: 10px; break-inside: avoid; }
+.pdf-sec-header { background: #1A1A1A; display: flex; align-items: stretch; }
+.pdf-sec-stripe { width: 5px; background: #E67E22; flex-shrink: 0; }
+.pdf-sec-title { color: #E67E22; font-size: 8.5pt; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 10px; flex: 1; }
+.pdf-sec-badge { font-size: 7.5pt; font-weight: 600; padding: 3px 10px; border-radius: 999px; align-self: center; margin-right: 6px; }
+.pdf-badge-ok { background: #27AE60; color: #fff; }
+.pdf-badge-alerta { background: #C0392B; color: #fff; }
+.pdf-content { background: #FDF6EC; border-left: 4px solid #E67E22; padding: 8px 12px; font-size: 9pt; line-height: 1.7; }
+.pdf-content.vazio { color: #999; font-style: italic; }
+.pdf-field { margin-bottom: 4px; }
+.pdf-field-label { font-size: 7.5pt; font-weight: 600; color: #E67E22; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1px; }
+.pdf-divider { height: 1px; background: #E8DDD0; margin: 4px 0; }
+.pdf-footer { margin-top: 20px; border-top: 1px solid #E67E22; padding-top: 6px; display: flex; justify-content: space-between; font-size: 7.5pt; color: #999; }
 </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
 <div class="topbar" id="topbar" style="display:none;">
-  <div class="topbar-brand">GRUPO <span>CAJUPAR</span> · COBRANÇA DIÁRIA</div>
-  <div class="topbar-date" id="topbar-date"></div>
+  <div class="topbar-brand">GRUPO <span>CAJUPAR</span></div>
+  <div class="topbar-right">
+    <span class="topbar-setor" id="topbar-setor" style="display:none;"></span>
+    <span class="topbar-date" id="topbar-date"></span>
+  </div>
 </div>
-
-<!-- PROGRESS -->
 <div class="progress-wrap" id="progress-wrap" style="display:none;">
   <div class="progress-labels">
-    <span id="prog-label">Pilar 1 de 15</span>
+    <span id="prog-label">—</span>
     <span id="prog-pct">0%</span>
   </div>
   <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
 </div>
 
-<!-- APP -->
 <div class="container">
 
-  <!-- WELCOME -->
   <div class="screen active" id="screen-welcome">
     <div class="welcome">
       <div class="welcome-logo">GRUPO CAJUPAR</div>
       <h1>Cobrança Diária<br>de Gerentes</h1>
-      <p>Reporte o dia anterior e defina as ações<br>para o dia de hoje.</p>
+      <p>Selecione o setor para preencher<br>os pilares operacionais do dia.</p>
       <div class="welcome-date" id="welcome-date"></div>
-      <div class="counter-pill"><span class="counter-dot"></span>15 pilares · ~5 min</div>
-      <button class="btn-start" onclick="iniciar()">Iniciar preenchimento →</button>
+      <div id="draft-banner-wrap"></div>
+      <div class="sector-grid">
+        <div class="sector-card" onclick="selecionarSetor('cpd')">
+          <div class="sector-icon icon-cpd">🥩</div>
+          <div class="sector-info"><h3>CPD</h3><p>Produção · Requisição · Estoque · Compras</p></div>
+        </div>
+        <div class="sector-card" onclick="selecionarSetor('front')">
+          <div class="sector-icon icon-front">🛎</div>
+          <div class="sector-info"><h3>Front</h3><p>Salão · Atendimento · Manutenção</p></div>
+        </div>
+        <div class="sector-card" onclick="selecionarSetor('back')">
+          <div class="sector-icon icon-back">🍳</div>
+          <div class="sector-info"><h3>Back</h3><p>Cozinha · Bar · Requisição · Estoque</p></div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- PERGUNTAS -->
+  <div class="screen" id="screen-nome">
+    <div class="nome-wrap">
+      <label class="nome-label">Seu nome completo</label>
+      <input type="text" class="nome-input" id="input-nome" placeholder="Ex: Rafael Souza" autocomplete="name">
+    </div>
+    <div class="nav">
+      <button class="btn btn-back" onclick="voltarParaWelcome()">← Voltar</button>
+      <button class="btn btn-next" onclick="iniciarPerguntas()">Começar →</button>
+    </div>
+  </div>
+
   <div class="screen" id="screen-perguntas">
+    <div class="autosave" id="autosave-label"></div>
     <div id="q-content"></div>
     <div class="nav" id="nav-buttons"></div>
   </div>
 
-  <!-- RESUMO -->
   <div class="screen" id="screen-resumo">
-    <div class="q-card" style="border-left-color: var(--black); margin-bottom:1rem;">
+    <div class="q-card" style="border-left-color:var(--black); margin-bottom:1rem;">
       <div class="q-secao">Revisão final</div>
-      <div class="q-pergunta" style="border-bottom:none; margin-bottom:0; padding-bottom:0;">Confira as respostas antes de gerar o relatório.</div>
+      <div class="q-pergunta" style="border:none; margin:0; padding:0;">Confira antes de gerar o relatório.</div>
     </div>
-    <div class="summary-card" id="resumo-lista"></div>
-    <div style="display:flex; gap:10px; margin-bottom:0.5rem;">
+    <div id="resumo-lista"></div>
+    <div class="nav" style="margin-bottom:0.5rem;">
       <button class="btn btn-back" onclick="voltarDoResumo()">← Voltar</button>
     </div>
     <button class="btn-generate" onclick="gerarPDF()">Gerar e imprimir relatório PDF →</button>
@@ -521,194 +242,253 @@
 
 </div>
 
-<!-- PDF OUTPUT (hidden until print) -->
-<div id="pdf-output">
-  <div class="pdf-page" id="pdf-page"></div>
-</div>
+<div id="pdf-output"><div class="pdf-page" id="pdf-page"></div></div>
 
 <script>
-const perguntas = [
-  { secao: "1. Reclamações", badge: null, pergunta: "Quantas reclamações tivemos ontem? Qual foi a mais grave?", campos: ["Qtd", "Motivo", "Resumo do ocorrido"] },
-  { secao: "2. Causa Raiz", badge: "ALERTA", pergunta: "Por que isso aconteceu? Foi falha de processo, pessoa, produto ou equipamento?", campos: ["Causa", "Detalhamento"] },
-  { secao: "3. Ação Imediata", badge: null, pergunta: "O que foi feito na hora para resolver com o cliente?", campos: ["Ação tomada", "Cliente foi contornado?"] },
-  { secao: "4. Plano de Ação", badge: null, pergunta: "O que você fez hoje para garantir que isso não se repita? Quem é o responsável?", campos: ["Ação", "Responsável", "Prazo"] },
-  { secao: "5. POP / Operação", badge: "ALERTA", pergunta: "O POP bateu? Se não, onde falhou?", campos: ["Status (OK/FALHA)", "Onde falhou", "Motivo"] },
-  { secao: "6. Equipe (Faltas / Atrasos)", badge: "ALERTA", pergunta: "Teve falta não prevista ou atraso? Qual impacto e o que foi feito?", campos: ["Ocorrência", "Impacto", "Ação tomada"] },
-  { secao: "7. Gestão D-1", badge: null, pergunta: "Essa falta era previsível? Houve falha de gestão?", campos: ["Status (SIM/NÃO)", "Motivo", "Ajuste feito"] },
-  { secao: "8. Requisição (CPD / Operação)", badge: "ALERTA", pergunta: "A requisição foi entregue no horário? Faltou algo?", campos: ["Status (OK/ATRASO/FALHA)", "Itens faltantes", "Motivo"] },
-  { secao: "9. Plano de Ação – Requisição", badge: null, pergunta: "O que foi feito para corrigir e evitar recorrência?", campos: ["Ação imediata", "Ação preventiva", "Responsável"] },
-  { secao: "10. Estoque Mínimo", badge: "ALERTA", pergunta: "Cite 3 itens abaixo do estoque mínimo e por quê.", campos: ["Item 1 + motivo", "Item 2 + motivo", "Item 3 + motivo"] },
-  { secao: "11. Compras", badge: "ALERTA", pergunta: "Teve item pedido que não chegou? Qual o motivo e plano de ação?", campos: ["Itens", "Motivo", "Ação com fornecedor", "Prazo normalização"] },
-  { secao: "12. Checklist", badge: "ALERTA", pergunta: "Todos os checklists foram feitos corretamente?", campos: ["Status (OK/FALHA)", "Quais não foram feitos", "Motivo"] },
-  { secao: "13. Manutenção", badge: "ALERTA", pergunta: "Tem algo emergencial hoje? Preventivas estão rodando?", campos: ["Emergencial (sim/não – qual?)", "Preventiva (OK/ATRASADA)", "Motivo"] },
-  { secao: "14. Plano Tático", badge: "OK", pergunta: "Qual a prioridade número 1 da operação hoje?", campos: ["Prioridade", "Foco da equipe"] },
-  { secao: "15. Risco do Dia", badge: "ALERTA", pergunta: "Qual é a única coisa que pode dar errado hoje?", campos: ["Risco", "Plano de contingência", "Responsável"] },
+const hoje = new Date();
+const ontem = new Date(hoje); ontem.setDate(hoje.getDate() - 1);
+const fmtData = d => d.toLocaleDateString('pt-BR');
+const today = fmtData(hoje);
+const yesterday = fmtData(ontem);
+document.getElementById('welcome-date').textContent = `Ref.: ${yesterday}`;
+document.getElementById('topbar-date').textContent = yesterday;
+
+const COMUNS = [
+  { id:'pop', num:'5', secao:'POP / Operação', badge:'ALERTA', pergunta:'O POP bateu? Se não, onde falhou?',
+    campos:[{label:'Status',tipo:'status'},{label:'Onde falhou',tipo:'textarea'},{label:'Motivo',tipo:'textarea'}] },
+  { id:'equipe', num:'6', secao:'Equipe (Faltas / Atrasos)', badge:'ALERTA', pergunta:'Teve falta não prevista ou atraso? Qual impacto e o que foi feito?',
+    campos:[{label:'Ocorrência',tipo:'textarea'},{label:'Impacto',tipo:'textarea'},{label:'Ação tomada',tipo:'textarea'}] },
+  { id:'gestao', num:'7', secao:'Gestão D-1', badge:null, pergunta:'Seguiu o processo de gestão D-1 e confirmou a presença dos funcionários e freelancers para hoje?',
+    campos:[{label:'Processo D-1 realizado?',tipo:'status_sim_nao'},{label:'Total de funcionários escalados para hoje',tipo:'textarea'},{label:'Alguma falta era previsível? Houve falha de gestão?',tipo:'textarea'},{label:'Ajuste feito',tipo:'textarea'}] },
+  { id:'checklist', num:'12', secao:'Checklist', badge:'ALERTA', pergunta:'Todos os checklists foram feitos corretamente?',
+    campos:[{label:'Status',tipo:'status'},{label:'Quais não foram feitos',tipo:'textarea'},{label:'Motivo',tipo:'textarea'}] },
+  { id:'tatico', num:'14', secao:'Plano Tático', badge:'OK', pergunta:'Qual a prioridade número 1 da operação hoje?',
+    campos:[{label:'Prioridade',tipo:'textarea'},{label:'Foco da equipe',tipo:'textarea'}] },
+  { id:'risco', num:'15', secao:'Risco do Dia', badge:'ALERTA', pergunta:'Qual é a única coisa que pode dar errado hoje?',
+    campos:[{label:'Risco',tipo:'textarea'},{label:'Plano de contingência',tipo:'textarea'},{label:'Responsável',tipo:'textarea'}] }
 ];
 
-let atual = 0;
-let respostas = perguntas.map(() => ({}));
-const hoje = new Date();
-const ontem = new Date(hoje);
-ontem.setDate(hoje.getDate() - 1);
+const ESPECIFICAS = {
+  cpd: [
+    { id:'req', num:'8', secao:'Requisição (CPD / Operação)', badge:'ALERTA', pergunta:'A requisição foi entregue no horário? Faltou algo?',
+      campos:[{label:'Status',tipo:'status_req'},{label:'Itens faltantes',tipo:'textarea'},{label:'Motivo',tipo:'textarea'}] },
+    { id:'plano_req', num:'9', secao:'Plano de Ação – Requisição', badge:null, pergunta:'O que foi feito para corrigir e evitar recorrência?',
+      campos:[{label:'Ação imediata',tipo:'textarea'},{label:'Ação preventiva',tipo:'textarea'},{label:'Responsável',tipo:'textarea'}] },
+    { id:'estoque', num:'10', secao:'Estoque Mínimo', badge:'ALERTA', pergunta:'Cite 3 itens abaixo do estoque mínimo e por quê.',
+      campos:[{label:'Item 1 + motivo',tipo:'textarea'},{label:'Item 2 + motivo',tipo:'textarea'},{label:'Item 3 + motivo',tipo:'textarea'}] },
+    { id:'compras', num:'11', secao:'Compras', badge:'ALERTA', pergunta:'Teve item pedido que não chegou? Qual o motivo e plano de ação?',
+      campos:[{label:'Itens',tipo:'textarea'},{label:'Motivo',tipo:'textarea'},{label:'Ação com fornecedor',tipo:'textarea'},{label:'Prazo normalização',tipo:'textarea'}] }
+  ],
+  front: [
+    { id:'manut', num:'13', secao:'Manutenção', badge:'ALERTA', pergunta:'Tem algo emergencial hoje? Preventivas estão rodando?',
+      campos:[{label:'Emergencial (sim/não – qual?)',tipo:'textarea'},{label:'Preventiva (OK/ATRASADA)',tipo:'status'},{label:'Motivo',tipo:'textarea'}] }
+  ],
+  back: [
+    { id:'req', num:'8', secao:'Requisição (CPD / Operação)', badge:'ALERTA', pergunta:'A requisição foi entregue no horário? Faltou algo?',
+      campos:[{label:'Status',tipo:'status_req'},{label:'Itens faltantes',tipo:'textarea'},{label:'Motivo',tipo:'textarea'}] },
+    { id:'plano_req', num:'9', secao:'Plano de Ação – Requisição', badge:null, pergunta:'O que foi feito para corrigir e evitar recorrência?',
+      campos:[{label:'Ação imediata',tipo:'textarea'},{label:'Ação preventiva',tipo:'textarea'},{label:'Responsável',tipo:'textarea'}] },
+    { id:'estoque', num:'10', secao:'Estoque Mínimo', badge:'ALERTA', pergunta:'Cite 3 itens abaixo do estoque mínimo e por quê.',
+      campos:[{label:'Item 1 + motivo',tipo:'textarea'},{label:'Item 2 + motivo',tipo:'textarea'},{label:'Item 3 + motivo',tipo:'textarea'}] }
+  ]
+};
 
-const today = hoje.toLocaleDateString('pt-BR');
-const yesterday = ontem.toLocaleDateString('pt-BR');
+let setor=null, gerente='', perguntas=[], atual=0, respostas=[], autosaveTimer=null;
+const DRAFT_KEY='cajupar_draft_v2';
 
-document.getElementById('welcome-date').textContent = `Referente a: ${yesterday}`;
-document.getElementById('topbar-date').textContent = `Ref.: ${yesterday} · Gerado em: ${today}`;
+function getDraft(){ try{ return JSON.parse(localStorage.getItem(DRAFT_KEY)); }catch{ return null; } }
+function saveDraft(){
+  localStorage.setItem(DRAFT_KEY, JSON.stringify({setor,gerente,respostas,atual,data:yesterday}));
+  const el=document.getElementById('autosave-label');
+  if(el){ el.textContent='✓ Rascunho salvo'; setTimeout(()=>{ if(el) el.textContent=''; },2000); }
+}
+function clearDraft(){ localStorage.removeItem(DRAFT_KEY); }
 
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+function buildPerguntas(s){ const ini=COMUNS.slice(0,3); const fim=COMUNS.slice(3); const esp=ESPECIFICAS[s]||[]; return [...ini,...esp,...fim]; }
+
+function showScreen(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+
+function voltarParaWelcome(){
+  document.getElementById('topbar').style.display='none';
+  document.getElementById('progress-wrap').style.display='none';
+  document.getElementById('topbar-setor').style.display='none';
+  showScreen('screen-welcome'); checkDraft();
 }
 
-function iniciar() {
-  document.getElementById('topbar').style.display = 'flex';
-  document.getElementById('progress-wrap').style.display = 'block';
-  showScreen('screen-perguntas');
+function checkDraft(){
+  const draft=getDraft();
+  const wrap=document.getElementById('draft-banner-wrap');
+  if(draft && draft.data===yesterday && draft.setor){
+    const sn={cpd:'CPD',front:'Front',back:'Back'}[draft.setor];
+    wrap.innerHTML=`<div class="draft-banner"><p><strong>Rascunho encontrado</strong>${sn} · ${draft.gerente||'Sem nome'} · ${draft.data}</p><div class="draft-btns"><button class="btn-draft-continuar" onclick="carregarDraft()">Continuar</button><button class="btn-draft-descartar" onclick="descartarDraft()">Descartar</button></div></div>`;
+  } else { wrap.innerHTML=''; }
+}
+
+function carregarDraft(){
+  const draft=getDraft(); if(!draft) return;
+  setor=draft.setor; gerente=draft.gerente; respostas=draft.respostas; atual=draft.atual;
+  perguntas=buildPerguntas(setor); setupTopbar();
+  document.getElementById('progress-wrap').style.display='block';
+  showScreen('screen-perguntas'); renderPergunta();
+}
+
+function descartarDraft(){ clearDraft(); document.getElementById('draft-banner-wrap').innerHTML=''; }
+
+function setupTopbar(){
+  document.getElementById('topbar').style.display='flex';
+  const el=document.getElementById('topbar-setor');
+  el.style.display='inline-block';
+  el.textContent=setor.toUpperCase();
+  el.className=`topbar-setor setor-${setor}`;
+}
+
+function selecionarSetor(s){
+  setor=s; setupTopbar(); showScreen('screen-nome');
+  setTimeout(()=>document.getElementById('input-nome').focus(),200);
+}
+
+function iniciarPerguntas(){
+  gerente=document.getElementById('input-nome').value.trim();
+  perguntas=buildPerguntas(setor);
+  respostas=perguntas.map(()=>({}));
+  atual=0;
+  document.getElementById('progress-wrap').style.display='block';
+  showScreen('screen-perguntas'); renderPergunta();
+}
+
+const STATUS_VALS=['OK','FALHA','ALERTA','SIM','NÃO','N/A','ATRASO'];
+
+function renderCampo(c, i, val){
+  if(c.tipo==='status'){
+    const extra = STATUS_VALS.includes(val) ? '' : val;
+    return `<div class="campo-wrap"><label class="campo-label">${c.label}</label>
+      <div class="quick-btns">
+        <button class="qbtn qbtn-ok${val==='OK'?' active':''}" onclick="setQuick(${i},'OK')">OK</button>
+        <button class="qbtn qbtn-falha${val==='FALHA'?' active':''}" onclick="setQuick(${i},'FALHA')">FALHA</button>
+        <button class="qbtn qbtn-alerta${val==='ALERTA'?' active':''}" onclick="setQuick(${i},'ALERTA')">ALERTA</button>
+      </div>
+      <textarea id="campo_${i}" placeholder="Detalhe..." oninput="autoSave()">${extra}</textarea></div>`;
+  }
+  if(c.tipo==='status_sim_nao'){
+    const extra = STATUS_VALS.includes(val) ? '' : val;
+    return `<div class="campo-wrap"><label class="campo-label">${c.label}</label>
+      <div class="quick-btns">
+        <button class="qbtn qbtn-ok${val==='SIM'?' active':''}" onclick="setQuick(${i},'SIM')">SIM</button>
+        <button class="qbtn qbtn-falha${val==='NÃO'?' active':''}" onclick="setQuick(${i},'NÃO')">NÃO</button>
+        <button class="qbtn qbtn-na${val==='N/A'?' active':''}" onclick="setQuick(${i},'N/A')">N/A</button>
+      </div>
+      <textarea id="campo_${i}" placeholder="Complemento..." oninput="autoSave()">${extra}</textarea></div>`;
+  }
+  if(c.tipo==='status_req'){
+    const extra = STATUS_VALS.includes(val) ? '' : val;
+    return `<div class="campo-wrap"><label class="campo-label">${c.label}</label>
+      <div class="quick-btns">
+        <button class="qbtn qbtn-ok${val==='OK'?' active':''}" onclick="setQuick(${i},'OK')">OK</button>
+        <button class="qbtn qbtn-alerta${val==='ATRASO'?' active':''}" onclick="setQuick(${i},'ATRASO')">ATRASO</button>
+        <button class="qbtn qbtn-falha${val==='FALHA'?' active':''}" onclick="setQuick(${i},'FALHA')">FALHA</button>
+      </div>
+      <textarea id="campo_${i}" placeholder="Complemento..." oninput="autoSave()">${extra}</textarea></div>`;
+  }
+  return `<div class="campo-wrap"><label class="campo-label">${c.label}</label>
+    <textarea id="campo_${i}" placeholder="Sem ocorrência" oninput="autoSave()">${val||''}</textarea></div>`;
+}
+
+function renderPergunta(){
+  const p=perguntas[atual];
+  const pct=Math.round((atual/perguntas.length)*100);
+  document.getElementById('progress-fill').style.width=pct+'%';
+  document.getElementById('prog-label').textContent=`${atual+1} / ${perguntas.length} — ${p.secao}`;
+  document.getElementById('prog-pct').textContent=pct+'%';
+  const badgeHTML=p.badge?`<span class="badge badge-${p.badge==='OK'?'ok':'alerta'}">${p.badge}</span>`:'';
+  document.getElementById('q-content').innerHTML=`<div class="q-card">
+    <div class="q-secao">${p.num}. ${p.secao} ${badgeHTML}</div>
+    <div class="q-pergunta">${p.pergunta}</div>
+    ${p.campos.map((c,i)=>renderCampo(c,i,respostas[atual][i]||'')).join('')}
+  </div>`;
+  document.getElementById('nav-buttons').innerHTML=`
+    ${atual>0?`<button class="btn btn-back" onclick="voltar()">← Voltar</button>`:''}
+    <button class="btn-skip" onclick="pular()">Pular</button>
+    <button class="btn btn-next" onclick="avancar()">${atual<perguntas.length-1?'Próximo →':'Revisar →'}</button>`;
+}
+
+function setQuick(i, val){
+  salvarAtual();
+  respostas[atual][i]=val;
   renderPergunta();
+  autoSave();
 }
 
-function atualizarProgress() {
-  const pct = Math.round((atual / perguntas.length) * 100);
-  document.getElementById('progress-fill').style.width = pct + '%';
-  document.getElementById('prog-label').textContent = `Pilar ${atual + 1} de ${perguntas.length}`;
-  document.getElementById('prog-pct').textContent = pct + '%';
-}
-
-function salvarAtual() {
-  perguntas[atual].campos.forEach((_, i) => {
-    const el = document.getElementById('campo_' + i);
-    if (el) respostas[atual][i] = el.value.trim();
+function salvarAtual(){
+  perguntas[atual].campos.forEach((c,i)=>{
+    const el=document.getElementById('campo_'+i); if(!el) return;
+    const base=respostas[atual][i];
+    const extra=el.value.trim();
+    if(STATUS_VALS.includes(base)){
+      respostas[atual][i]=extra?`${base} — ${extra}`:base;
+    } else {
+      respostas[atual][i]=extra;
+    }
   });
 }
 
-function renderPergunta() {
-  atualizarProgress();
-  const p = perguntas[atual];
-  const badgeHTML = p.badge
-    ? `<span class="badge badge-${p.badge === 'OK' ? 'ok' : 'alerta'}">${p.badge}</span>`
-    : '';
+function autoSave(){ clearTimeout(autosaveTimer); autosaveTimer=setTimeout(()=>{ salvarAtual(); saveDraft(); },1200); }
 
-  document.getElementById('q-content').innerHTML = `
-    <div class="q-card">
-      <div class="q-secao">${p.secao} ${badgeHTML}</div>
-      <div class="q-pergunta">${p.pergunta}</div>
-      ${p.campos.map((campo, i) => `
-        <div class="campo-wrap">
-          <label class="campo-label">${campo}</label>
-          <textarea id="campo_${i}" placeholder="Sem ocorrência">${respostas[atual][i] || ''}</textarea>
-        </div>
-      `).join('')}
-    </div>
-  `;
+function avancar(){ salvarAtual(); saveDraft(); if(atual<perguntas.length-1){ atual++; renderPergunta(); window.scrollTo(0,0); } else { mostrarResumo(); } }
+function voltar(){ salvarAtual(); if(atual>0){ atual--; renderPergunta(); window.scrollTo(0,0); } }
+function pular(){ respostas[atual]={}; saveDraft(); if(atual<perguntas.length-1){ atual++; renderPergunta(); window.scrollTo(0,0); } else { mostrarResumo(); } }
+function voltarDoResumo(){ atual=perguntas.length-1; showScreen('screen-perguntas'); renderPergunta(); window.scrollTo(0,0); }
 
-  const nav = document.getElementById('nav-buttons');
-  nav.innerHTML = `
-    ${atual > 0 ? `<button class="btn btn-back" onclick="voltar()">← Voltar</button>` : ''}
-    <button class="btn-skip" onclick="pular()">Pular</button>
-    <button class="btn btn-next" onclick="avancar()">${atual < perguntas.length - 1 ? 'Próximo →' : 'Revisar →'}</button>
-  `;
-}
-
-function avancar() {
-  salvarAtual();
-  if (atual < perguntas.length - 1) { atual++; renderPergunta(); }
-  else { mostrarResumo(); }
-}
-
-function voltar() {
-  salvarAtual();
-  if (atual > 0) { atual--; renderPergunta(); }
-}
-
-function pular() {
-  respostas[atual] = {};
-  if (atual < perguntas.length - 1) { atual++; renderPergunta(); }
-  else { mostrarResumo(); }
-}
-
-function voltarDoResumo() {
-  atual = perguntas.length - 1;
-  showScreen('screen-perguntas');
-  renderPergunta();
-}
-
-function mostrarResumo() {
-  const lista = document.getElementById('resumo-lista');
-  lista.innerHTML = perguntas.map((p, idx) => {
-    const vals = Object.values(respostas[idx]).filter(v => v);
-    const texto = vals.join('\n') || null;
-    return `
-      <div class="summary-item">
-        <div class="summary-label">${p.secao}</div>
-        <div class="summary-value ${!texto ? 'vazio' : ''}">${texto || 'Sem ocorrência'}</div>
-      </div>
-    `;
-  }).join('');
+function mostrarResumo(){
+  const sn={cpd:'CPD',front:'Front',back:'Back'}[setor];
+  document.getElementById('resumo-lista').innerHTML=`<div class="summary-card">
+    <div class="summary-setor-header">${sn} · ${gerente||'Sem nome'} · Ref.: ${yesterday}</div>
+    ${perguntas.map((p,idx)=>{
+      const vals=Object.values(respostas[idx]).filter(v=>v);
+      const texto=vals.join('\n')||null;
+      return `<div class="summary-item"><div class="summary-label">${p.num}. ${p.secao}</div>
+        <div class="summary-value ${!texto?'vazio':''}">${texto||'Sem ocorrência'}</div></div>`;
+    }).join('')}
+  </div>`;
   showScreen('screen-resumo');
-  document.getElementById('progress-fill').style.width = '100%';
-  document.getElementById('prog-label').textContent = 'Revisão';
-  document.getElementById('prog-pct').textContent = '100%';
+  document.getElementById('progress-fill').style.width='100%';
+  document.getElementById('prog-label').textContent='Revisão completa';
+  document.getElementById('prog-pct').textContent='100%';
+  window.scrollTo(0,0);
 }
 
-function badgePDF(badge) {
-  if (!badge) return '';
-  const cls = badge === 'OK' ? 'pdf-badge-ok' : badge === 'ALERTA' ? 'pdf-badge-alerta' : 'pdf-badge-falha';
-  return `<span class="pdf-section-badge ${cls}">${badge}</span>`;
-}
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); }
+function badgePDF(b){ if(!b) return ''; const cls=b==='OK'?'pdf-badge-ok':'pdf-badge-alerta'; return `<span class="pdf-sec-badge ${cls}">${b}</span>`; }
 
-function gerarPDF() {
-  const page = document.getElementById('pdf-page');
-  const sections = perguntas.map((p, idx) => {
-    const vals = Object.values(respostas[idx]).filter(v => v);
-    const campos = p.campos.map((campo, i) => {
-      const val = respostas[idx][i];
-      if (!val) return '';
-      return `<div class="pdf-field-label">${campo}</div><div>${escHtml(val)}</div><div class="pdf-divider"></div>`;
-    }).join('');
-    const conteudo = campos || '<span style="color:#999;font-style:italic;">Sem ocorrência</span>';
-    const isEmpty = !vals.length;
-    return `
-      <div class="pdf-section">
-        <div class="pdf-section-header">
-          <div class="pdf-section-stripe"></div>
-          <div class="pdf-section-title">${p.secao}</div>
-          ${badgePDF(p.badge)}
-        </div>
-        <div class="pdf-content ${isEmpty ? 'vazio' : ''}">${conteudo}</div>
-      </div>
-    `;
+function gerarPDF(){
+  const sn={cpd:'CPD',front:'Front',back:'Back'}[setor];
+  const sections=perguntas.map((p,idx)=>{
+    const campos=p.campos.map((c,i)=>{ const v=respostas[idx][i]; if(!v) return ''; return `<div class="pdf-field"><div class="pdf-field-label">${c.label}</div><div>${esc(v)}</div></div><div class="pdf-divider"></div>`; }).join('');
+    const isEmpty=!Object.values(respostas[idx]).some(v=>v);
+    return `<div class="pdf-section"><div class="pdf-sec-header"><div class="pdf-sec-stripe"></div><div class="pdf-sec-title">${p.num}. ${p.secao}</div>${badgePDF(p.badge)}</div>
+      <div class="pdf-content ${isEmpty?'vazio':''}">${isEmpty?'Sem ocorrência':campos}</div></div>`;
   }).join('');
-
-  page.innerHTML = `
-    <div class="pdf-header">
-      <div class="pdf-header-stripe"></div>
+  document.getElementById('pdf-page').innerHTML=`
+    <div class="pdf-header"><div class="pdf-header-stripe"></div><div class="pdf-header-body">
       <div class="pdf-header-title">GRUPO CAJUPAR · COBRANÇA DIÁRIA GERENTES</div>
-    </div>
-    <div class="pdf-red-line"></div>
-    <div class="pdf-date">Referente a: ${yesterday} &nbsp;·&nbsp; Gerado em: ${today}</div>
+      <div class="pdf-header-sub">Setor: ${sn} &nbsp;·&nbsp; Referente a: ${yesterday} &nbsp;·&nbsp; Gerado em: ${today}</div>
+    </div></div>
+    <div class="pdf-redline"></div>
+    <div class="pdf-gerente"><span>Gerente: ${esc(gerente)||'—'}</span><span>Setor: ${sn}</span></div>
     ${sections}
-    <div class="pdf-footer">
-      <span>GRUPO CAJUPAR · DOCUMENTO INTERNO · USO RESTRITO</span>
-      <span>Gerado em ${today}</span>
-    </div>
-  `;
-
-  setTimeout(() => window.print(), 300);
+    <div class="pdf-footer"><span>GRUPO CAJUPAR · DOCUMENTO INTERNO · USO RESTRITO</span><span>Gerado em ${today}</span></div>`;
+  clearDraft();
+  setTimeout(()=>window.print(),300);
 }
 
-function escHtml(str) {
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+function novoRelatorio(){
+  clearDraft(); setor=null; gerente=''; perguntas=[]; atual=0; respostas=[];
+  document.getElementById('topbar').style.display='none';
+  document.getElementById('progress-wrap').style.display='none';
+  document.getElementById('topbar-setor').style.display='none';
+  showScreen('screen-welcome'); checkDraft(); window.scrollTo(0,0);
 }
 
-function novoRelatorio() {
-  atual = 0;
-  respostas = perguntas.map(() => ({}));
-  document.getElementById('topbar').style.display = 'none';
-  document.getElementById('progress-wrap').style.display = 'none';
-  showScreen('screen-welcome');
-}
+checkDraft();
 </script>
 </body>
 </html>

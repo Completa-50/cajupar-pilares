@@ -13,7 +13,9 @@
   --beige: #FDF6EC;
   --beige-dark: #F0E6D3;
   --green: #27AE60;
+  --green-light: #82C341;
   --red: #C0392B;
+  --yellow: #F39C12;
   --border: #D9CFC4;
   --white: #FFFFFF;
   --text: #1A1A1A;
@@ -22,27 +24,9 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { font-family: 'IBM Plex Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-body {
-  font-family: 'IBM Plex Sans', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  font-size: 15px;
-}
-
-.topbar {
-  background: var(--black);
-  border-bottom: 3px solid var(--orange);
-  padding: 0 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 52px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
+.topbar { background: var(--black); border-bottom: 3px solid var(--orange); padding: 0 1rem; display: flex; align-items: center; justify-content: space-between; height: 52px; position: sticky; top: 0; z-index: 100; }
 .topbar-brand { font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; color: #fff; letter-spacing: 0.06em; }
 .topbar-brand span { color: var(--orange); }
 .topbar-right { display: flex; align-items: center; gap: 8px; }
@@ -58,7 +42,6 @@ body {
 .progress-fill { height: 100%; background: var(--orange); border-radius: 2px; transition: width 0.4s ease; }
 
 .container { max-width: 640px; margin: 0 auto; padding: 1.25rem 1rem; }
-
 .screen { display: none; }
 .screen.active { display: block; animation: fadeUp 0.2s ease; }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
@@ -70,7 +53,7 @@ body {
 .welcome-date { display: inline-block; background: var(--beige-dark); border: 1px solid var(--border); border-radius: 4px; padding: 5px 14px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--orange); margin-bottom: 1.5rem; }
 
 .sector-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 1.5rem; }
-.sector-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 8px; padding: 1rem 1.25rem; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 14px; text-align: left; }
+.sector-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 8px; padding: 1rem 1.25rem; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 14px; }
 .sector-card:hover, .sector-card:active { border-color: var(--orange); background: var(--beige); transform: translateY(-1px); }
 .sector-icon { width: 42px; height: 42px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
 .icon-cpd { background: #F3E5F5; }
@@ -126,6 +109,30 @@ textarea:focus { outline: none; border-color: var(--orange); background: #FFFDF9
 .summary-value { font-size: 13px; color: var(--text); line-height: 1.5; white-space: pre-wrap; }
 .summary-value.vazio { color: var(--muted); font-style: italic; }
 
+/* SCORE PREVIEW */
+.score-preview { background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; margin-bottom: 1rem; text-align: center; }
+.score-circle { width: 90px; height: 90px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-family: 'IBM Plex Mono', monospace; font-size: 24px; font-weight: 600; color: #fff; }
+.score-circle.critico { background: var(--red); }
+.score-circle.alerta { background: var(--yellow); }
+.score-circle.bom { background: var(--green-light); }
+.score-circle.excelente { background: var(--green); }
+.score-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+.score-label.critico { color: var(--red); }
+.score-label.alerta { color: var(--yellow); }
+.score-label.bom { color: var(--green-light); }
+.score-label.excelente { color: var(--green); }
+.score-msg { font-size: 12px; color: var(--muted); }
+.score-table { width: 100%; margin-top: 14px; border-collapse: collapse; font-size: 12px; text-align: left; }
+.score-table tr { border-bottom: 1px solid var(--beige-dark); }
+.score-table td { padding: 6px 4px; }
+.score-table td:first-child { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; flex: 1; }
+.score-table td:nth-child(2) { color: var(--muted); font-size: 10px; white-space: nowrap; padding: 0 8px; }
+.score-tag { font-size: 9px; font-weight: 600; padding: 2px 8px; border-radius: 999px; letter-spacing: 0.06em; float: right; }
+.score-tag-ok { background: #EAFAF1; color: #1E8449; }
+.score-tag-falha { background: #FDEDEC; color: #C0392B; }
+.score-tag-alerta { background: #FEF9E7; color: #B7770D; }
+.score-tag-skip { background: #F4F6F7; color: #666; }
+
 .btn-generate { width: 100%; padding: 14px; background: var(--black); color: #fff; font-size: 15px; font-weight: 500; font-family: 'IBM Plex Sans', sans-serif; border: none; border-radius: 5px; cursor: pointer; margin-top: 0.75rem; }
 .btn-generate:active { transform: scale(0.98); }
 .btn-novo { width: 100%; padding: 11px; background: #fff; color: var(--muted); font-size: 14px; font-family: 'IBM Plex Sans', sans-serif; border: 1px solid var(--border); border-radius: 5px; cursor: pointer; margin-top: 8px; }
@@ -137,20 +144,33 @@ textarea:focus { outline: none; border-color: var(--orange); background: #FFFDF9
 .btn-draft-continuar { font-size: 12px; font-weight: 600; padding: 6px 12px; background: var(--orange); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-family: 'IBM Plex Sans', sans-serif; }
 .btn-draft-descartar { font-size: 12px; padding: 6px 10px; background: none; color: var(--muted); border: 1px solid var(--border); border-radius: 4px; cursor: pointer; font-family: 'IBM Plex Sans', sans-serif; }
 
+/* PDF */
 @media print {
   body > *:not(#pdf-output) { display: none !important; }
   #pdf-output { display: block !important; }
   .pdf-page { display: block !important; }
-  @page { margin: 15mm; size: A4; }
+  @page { margin: 12mm; size: A4; }
 }
 #pdf-output { display: none; }
 .pdf-page { font-family: 'IBM Plex Mono', monospace; font-size: 9.5pt; color: #1A1A1A; background: white; }
+
+/* PDF HEADER */
 .pdf-header { background: #1A1A1A; display: flex; align-items: stretch; margin-bottom: 3px; }
 .pdf-header-stripe { width: 7px; background: #E67E22; flex-shrink: 0; }
 .pdf-header-body { flex: 1; padding: 10px 14px; }
 .pdf-header-title { color: #fff; font-size: 12pt; font-weight: 600; letter-spacing: 0.05em; }
 .pdf-header-sub { color: #E67E22; font-size: 8pt; margin-top: 2px; }
-.pdf-redline { height: 2px; background: #C0392B; margin-bottom: 10px; }
+.pdf-redline { height: 2px; background: #C0392B; margin-bottom: 6px; }
+
+/* PDF STATUS BADGE */
+.pdf-status-bar { display: flex; align-items: center; gap: 10px; padding: 6px 12px; margin-bottom: 10px; }
+.pdf-status-label { font-size: 8pt; font-weight: 600; color: #666; letter-spacing: 0.08em; text-transform: uppercase; }
+.pdf-status-badge { font-size: 8.5pt; font-weight: 600; padding: 3px 14px; border-radius: 999px; letter-spacing: 0.08em; }
+.pdf-status-critico { background: #C0392B; color: #fff; }
+.pdf-status-alerta { background: #F39C12; color: #fff; }
+.pdf-status-bom { background: #82C341; color: #fff; }
+.pdf-status-excelente { background: #27AE60; color: #fff; }
+
 .pdf-gerente { background: #1A1A1A; color: #fff; padding: 5px 12px; display: flex; justify-content: space-between; font-size: 8pt; margin-bottom: 10px; }
 .pdf-section { margin-bottom: 10px; break-inside: avoid; }
 .pdf-sec-header { background: #1A1A1A; display: flex; align-items: stretch; }
@@ -158,13 +178,44 @@ textarea:focus { outline: none; border-color: var(--orange); background: #FFFDF9
 .pdf-sec-title { color: #E67E22; font-size: 8.5pt; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 10px; flex: 1; }
 .pdf-sec-badge { font-size: 7.5pt; font-weight: 600; padding: 3px 10px; border-radius: 999px; align-self: center; margin-right: 6px; }
 .pdf-badge-ok { background: #27AE60; color: #fff; }
-.pdf-badge-alerta { background: #C0392B; color: #fff; }
+.pdf-badge-alerta { background: #F39C12; color: #fff; }
+.pdf-badge-falha { background: #C0392B; color: #fff; }
 .pdf-content { background: #FDF6EC; border-left: 4px solid #E67E22; padding: 8px 12px; font-size: 9pt; line-height: 1.7; }
 .pdf-content.vazio { color: #999; font-style: italic; }
 .pdf-field { margin-bottom: 4px; }
 .pdf-field-label { font-size: 7.5pt; font-weight: 600; color: #E67E22; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1px; }
 .pdf-divider { height: 1px; background: #E8DDD0; margin: 4px 0; }
-.pdf-footer { margin-top: 20px; border-top: 1px solid #E67E22; padding-top: 6px; display: flex; justify-content: space-between; font-size: 7.5pt; color: #999; }
+
+/* NOTA FINAL PDF */
+.pdf-score-section { break-inside: avoid; margin-top: 16px; }
+.pdf-score-header { background: #1A1A1A; padding: 8px 12px; }
+.pdf-score-header-title { color: #E67E22; font-size: 9pt; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+.pdf-score-body { background: #FDF6EC; border: 1px solid #E8DDD0; padding: 16px; text-align: center; }
+.pdf-score-circle { width: 80px; height: 80px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 20pt; font-weight: 600; color: #fff; margin-bottom: 8px; }
+.pdf-score-circle.critico { background: #C0392B; }
+.pdf-score-circle.alerta { background: #F39C12; }
+.pdf-score-circle.bom { background: #82C341; }
+.pdf-score-circle.excelente { background: #27AE60; }
+.pdf-score-status { font-size: 9pt; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+.pdf-score-status.critico { color: #C0392B; }
+.pdf-score-status.alerta { color: #F39C12; }
+.pdf-score-status.bom { color: #82C341; }
+.pdf-score-status.excelente { color: #27AE60; }
+.pdf-score-msg { font-size: 8pt; color: #666; margin-bottom: 14px; }
+.pdf-score-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 8.5pt; }
+.pdf-score-table tr { border-bottom: 1px solid #E8DDD0; }
+.pdf-score-table td { padding: 5px 6px; }
+.pdf-score-table td:first-child { font-size: 8pt; letter-spacing: 0.04em; text-transform: uppercase; color: #333; }
+.pdf-score-table td:nth-child(2) { color: #999; font-size: 7.5pt; text-align: center; }
+.pdf-score-table td:nth-child(3) { color: #999; font-size: 7.5pt; text-align: center; }
+.pdf-score-table td:last-child { text-align: right; }
+.pdf-stag { font-size: 7.5pt; font-weight: 600; padding: 2px 8px; border-radius: 999px; }
+.pdf-stag-ok { background: #EAFAF1; color: #1E8449; }
+.pdf-stag-falha { background: #FDEDEC; color: #C0392B; }
+.pdf-stag-alerta { background: #FEF9E7; color: #B7770D; }
+.pdf-stag-skip { background: #F4F6F7; color: #888; }
+
+.pdf-footer { margin-top: 16px; border-top: 1px solid #E67E22; padding-top: 6px; display: flex; justify-content: space-between; font-size: 7.5pt; color: #999; }
 </style>
 </head>
 <body>
@@ -177,10 +228,7 @@ textarea:focus { outline: none; border-color: var(--orange); background: #FFFDF9
   </div>
 </div>
 <div class="progress-wrap" id="progress-wrap" style="display:none;">
-  <div class="progress-labels">
-    <span id="prog-label">—</span>
-    <span id="prog-pct">0%</span>
-  </div>
+  <div class="progress-labels"><span id="prog-label">—</span><span id="prog-pct">0%</span></div>
   <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
 </div>
 
@@ -232,6 +280,7 @@ textarea:focus { outline: none; border-color: var(--orange); background: #FFFDF9
       <div class="q-secao">Revisão final</div>
       <div class="q-pergunta" style="border:none; margin:0; padding:0;">Confira antes de gerar o relatório.</div>
     </div>
+    <div id="score-preview-wrap"></div>
     <div id="resumo-lista"></div>
     <div class="nav" style="margin-bottom:0.5rem;">
       <button class="btn btn-back" onclick="voltarDoResumo()">← Voltar</button>
@@ -253,6 +302,21 @@ const yesterday = fmtData(ontem);
 document.getElementById('welcome-date').textContent = `Ref.: ${yesterday}`;
 document.getElementById('topbar-date').textContent = yesterday;
 
+// ── PESOS E PILARES ────────────────────────────────────────────────────────
+const PESOS = {
+  pop: { peso: 20, nivel: 'GRAVE' },
+  equipe: { peso: 10, nivel: 'MÉDIO' },
+  gestao: { peso: 10, nivel: 'MÉDIO' },
+  requisicao: { peso: 12, nivel: 'GRAVE' },
+  estoque: { peso: 10, nivel: 'GRAVE' },
+  checklist: { peso: 18, nivel: 'GRAVE' },
+  tatico: { peso: 5, nivel: 'MÉDIO' },
+  risco: { peso: 5, nivel: 'MÉDIO' },
+  manutencao: { peso: 5, nivel: 'BRANDO' },
+  plano_req: { peso: 5, nivel: 'BRANDO' },
+};
+
+// ── PERGUNTAS ──────────────────────────────────────────────────────────────
 const COMUNS = [
   { id:'pop', num:'5', secao:'POP / Operação', badge:'ALERTA', pergunta:'O POP bateu? Se não, onde falhou?',
     campos:[{label:'Status',tipo:'status'},{label:'Onde falhou',tipo:'textarea'},{label:'Motivo',tipo:'textarea'}] },
@@ -270,7 +334,7 @@ const COMUNS = [
 
 const ESPECIFICAS = {
   cpd: [
-    { id:'req', num:'8', secao:'Requisição (CPD / Operação)', badge:'ALERTA', pergunta:'A requisição foi entregue no horário? Faltou algo?',
+    { id:'requisicao', num:'8', secao:'Requisição (CPD / Operação)', badge:'ALERTA', pergunta:'A requisição foi entregue no horário? Faltou algo?',
       campos:[{label:'Status',tipo:'status_req'},{label:'Itens faltantes',tipo:'textarea'},{label:'Motivo',tipo:'textarea'}] },
     { id:'plano_req', num:'9', secao:'Plano de Ação – Requisição', badge:null, pergunta:'O que foi feito para corrigir e evitar recorrência?',
       campos:[{label:'Ação imediata',tipo:'textarea'},{label:'Ação preventiva',tipo:'textarea'},{label:'Responsável',tipo:'textarea'}] },
@@ -280,11 +344,11 @@ const ESPECIFICAS = {
       campos:[{label:'Itens',tipo:'textarea'},{label:'Motivo',tipo:'textarea'},{label:'Ação com fornecedor',tipo:'textarea'},{label:'Prazo normalização',tipo:'textarea'}] }
   ],
   front: [
-    { id:'manut', num:'13', secao:'Manutenção', badge:'ALERTA', pergunta:'Tem algo emergencial hoje? Preventivas estão rodando?',
+    { id:'manutencao', num:'13', secao:'Manutenção', badge:'ALERTA', pergunta:'Tem algo emergencial hoje? Preventivas estão rodando?',
       campos:[{label:'Emergencial (sim/não – qual?)',tipo:'textarea'},{label:'Preventiva (OK/ATRASADA)',tipo:'status'},{label:'Motivo',tipo:'textarea'}] }
   ],
   back: [
-    { id:'req', num:'8', secao:'Requisição (CPD / Operação)', badge:'ALERTA', pergunta:'A requisição foi entregue no horário? Faltou algo?',
+    { id:'requisicao', num:'8', secao:'Requisição (CPD / Operação)', badge:'ALERTA', pergunta:'A requisição foi entregue no horário? Faltou algo?',
       campos:[{label:'Status',tipo:'status_req'},{label:'Itens faltantes',tipo:'textarea'},{label:'Motivo',tipo:'textarea'}] },
     { id:'plano_req', num:'9', secao:'Plano de Ação – Requisição', badge:null, pergunta:'O que foi feito para corrigir e evitar recorrência?',
       campos:[{label:'Ação imediata',tipo:'textarea'},{label:'Ação preventiva',tipo:'textarea'},{label:'Responsável',tipo:'textarea'}] },
@@ -293,143 +357,97 @@ const ESPECIFICAS = {
   ]
 };
 
+// ── STATE ──────────────────────────────────────────────────────────────────
 let setor=null, gerente='', perguntas=[], atual=0, respostas=[], autosaveTimer=null;
-const DRAFT_KEY='cajupar_draft_v2';
+const DRAFT_KEY='cajupar_draft_v3';
 
 function getDraft(){ try{ return JSON.parse(localStorage.getItem(DRAFT_KEY)); }catch{ return null; } }
-function saveDraft(){
-  localStorage.setItem(DRAFT_KEY, JSON.stringify({setor,gerente,respostas,atual,data:yesterday}));
-  const el=document.getElementById('autosave-label');
-  if(el){ el.textContent='✓ Rascunho salvo'; setTimeout(()=>{ if(el) el.textContent=''; },2000); }
-}
+function saveDraft(){ localStorage.setItem(DRAFT_KEY, JSON.stringify({setor,gerente,respostas,atual,data:yesterday})); const el=document.getElementById('autosave-label'); if(el){ el.textContent='✓ Rascunho salvo'; setTimeout(()=>{ if(el) el.textContent=''; },2000); } }
 function clearDraft(){ localStorage.removeItem(DRAFT_KEY); }
-
 function buildPerguntas(s){ const ini=COMUNS.slice(0,3); const fim=COMUNS.slice(3); const esp=ESPECIFICAS[s]||[]; return [...ini,...esp,...fim]; }
-
 function showScreen(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
 
-function voltarParaWelcome(){
-  document.getElementById('topbar').style.display='none';
-  document.getElementById('progress-wrap').style.display='none';
-  document.getElementById('topbar-setor').style.display='none';
-  showScreen('screen-welcome'); checkDraft();
-}
-
-function checkDraft(){
-  const draft=getDraft();
-  const wrap=document.getElementById('draft-banner-wrap');
-  if(draft && draft.data===yesterday && draft.setor){
-    const sn={cpd:'CPD',front:'Front',back:'Back'}[draft.setor];
-    wrap.innerHTML=`<div class="draft-banner"><p><strong>Rascunho encontrado</strong>${sn} · ${draft.gerente||'Sem nome'} · ${draft.data}</p><div class="draft-btns"><button class="btn-draft-continuar" onclick="carregarDraft()">Continuar</button><button class="btn-draft-descartar" onclick="descartarDraft()">Descartar</button></div></div>`;
-  } else { wrap.innerHTML=''; }
-}
-
-function carregarDraft(){
-  const draft=getDraft(); if(!draft) return;
-  setor=draft.setor; gerente=draft.gerente; respostas=draft.respostas; atual=draft.atual;
-  perguntas=buildPerguntas(setor); setupTopbar();
-  document.getElementById('progress-wrap').style.display='block';
-  showScreen('screen-perguntas'); renderPergunta();
-}
-
-function descartarDraft(){ clearDraft(); document.getElementById('draft-banner-wrap').innerHTML=''; }
-
-function setupTopbar(){
-  document.getElementById('topbar').style.display='flex';
-  const el=document.getElementById('topbar-setor');
-  el.style.display='inline-block';
-  el.textContent=setor.toUpperCase();
-  el.className=`topbar-setor setor-${setor}`;
-}
-
-function selecionarSetor(s){
-  setor=s; setupTopbar(); showScreen('screen-nome');
-  setTimeout(()=>document.getElementById('input-nome').focus(),200);
-}
-
-function iniciarPerguntas(){
-  gerente=document.getElementById('input-nome').value.trim();
-  perguntas=buildPerguntas(setor);
-  respostas=perguntas.map(()=>({}));
-  atual=0;
-  document.getElementById('progress-wrap').style.display='block';
-  showScreen('screen-perguntas'); renderPergunta();
-}
-
+// ── SCORE ──────────────────────────────────────────────────────────────────
 const STATUS_VALS=['OK','FALHA','ALERTA','SIM','NÃO','N/A','ATRASO'];
 
-function renderCampo(c, i, val){
-  if(c.tipo==='status'){
-    const extra = STATUS_VALS.includes(val) ? '' : val;
-    return `<div class="campo-wrap"><label class="campo-label">${c.label}</label>
-      <div class="quick-btns">
-        <button class="qbtn qbtn-ok${val==='OK'?' active':''}" onclick="setQuick(${i},'OK')">OK</button>
-        <button class="qbtn qbtn-falha${val==='FALHA'?' active':''}" onclick="setQuick(${i},'FALHA')">FALHA</button>
-        <button class="qbtn qbtn-alerta${val==='ALERTA'?' active':''}" onclick="setQuick(${i},'ALERTA')">ALERTA</button>
-      </div>
-      <textarea id="campo_${i}" placeholder="Detalhe..." oninput="autoSave()">${extra}</textarea></div>`;
-  }
-  if(c.tipo==='status_sim_nao'){
-    const extra = STATUS_VALS.includes(val) ? '' : val;
-    return `<div class="campo-wrap"><label class="campo-label">${c.label}</label>
-      <div class="quick-btns">
-        <button class="qbtn qbtn-ok${val==='SIM'?' active':''}" onclick="setQuick(${i},'SIM')">SIM</button>
-        <button class="qbtn qbtn-falha${val==='NÃO'?' active':''}" onclick="setQuick(${i},'NÃO')">NÃO</button>
-        <button class="qbtn qbtn-na${val==='N/A'?' active':''}" onclick="setQuick(${i},'N/A')">N/A</button>
-      </div>
-      <textarea id="campo_${i}" placeholder="Complemento..." oninput="autoSave()">${extra}</textarea></div>`;
-  }
-  if(c.tipo==='status_req'){
-    const extra = STATUS_VALS.includes(val) ? '' : val;
-    return `<div class="campo-wrap"><label class="campo-label">${c.label}</label>
-      <div class="quick-btns">
-        <button class="qbtn qbtn-ok${val==='OK'?' active':''}" onclick="setQuick(${i},'OK')">OK</button>
-        <button class="qbtn qbtn-alerta${val==='ATRASO'?' active':''}" onclick="setQuick(${i},'ATRASO')">ATRASO</button>
-        <button class="qbtn qbtn-falha${val==='FALHA'?' active':''}" onclick="setQuick(${i},'FALHA')">FALHA</button>
-      </div>
-      <textarea id="campo_${i}" placeholder="Complemento..." oninput="autoSave()">${extra}</textarea></div>`;
-  }
-  return `<div class="campo-wrap"><label class="campo-label">${c.label}</label>
-    <textarea id="campo_${i}" placeholder="Sem ocorrência" oninput="autoSave()">${val||''}</textarea></div>`;
+function getStatusFromResp(resp) {
+  const v = Object.values(resp).find(v => STATUS_VALS.includes(v) || (v && v.startsWith && STATUS_VALS.some(s => v.startsWith(s))));
+  if (!v) return null;
+  if (v.startsWith('OK') || v === 'SIM') return 'OK';
+  if (v.startsWith('FALHA') || v === 'NÃO') return 'FALHA';
+  if (v.startsWith('ALERTA') || v.startsWith('ATRASO')) return 'ALERTA';
+  return null;
+}
+
+function calcScore() {
+  let totalPeso = 0, totalPontos = 0;
+  const detalhes = [];
+
+  perguntas.forEach((p, idx) => {
+    const cfg = PESOS[p.id];
+    if (!cfg) return;
+    const resp = respostas[idx];
+    const isEmpty = !Object.values(resp).some(v => v);
+    if (isEmpty) { detalhes.push({secao: p.secao, peso: cfg.peso, nivel: cfg.nivel, status: 'skip'}); return; }
+    const status = getStatusFromResp(resp);
+    let pct = status === 'OK' ? 1 : status === 'ALERTA' ? 0.5 : status === 'FALHA' ? 0 : 1;
+    totalPeso += cfg.peso;
+    totalPontos += cfg.peso * pct;
+    detalhes.push({secao: p.secao, peso: cfg.peso, nivel: cfg.nivel, status: status || 'OK', pct});
+  });
+
+  const score = totalPeso > 0 ? Math.round((totalPontos / totalPeso) * 100) : 100;
+  const cls = score < 50 ? 'critico' : score < 75 ? 'alerta' : score < 90 ? 'bom' : 'excelente';
+  const label = score < 50 ? 'CRÍTICO' : score < 75 ? 'ATENÇÃO' : score < 90 ? 'BOM PLANTÃO' : 'EXCELENTE';
+  const msg = score < 50 ? 'Situação crítica — intervenção imediata necessária.' : score < 75 ? 'Operação com alertas relevantes — ajuste necessário hoje.' : score < 90 ? 'Bom plantão com boa gestão.' : 'Excelente plantão — parabéns à equipe!';
+  return {score, cls, label, msg, detalhes};
+}
+
+function renderScorePreview() {
+  const {score, cls, label, msg, detalhes} = calcScore();
+  const rows = '';
+  document.getElementById('score-preview-wrap').innerHTML = `
+    <div class="score-preview">
+      <div class="score-circle ${cls}">${score}%</div>
+      <div class="score-label ${cls}">${label}</div>
+      <div class="score-msg">${msg}</div>
+    </div>`;
+}
+
+// ── NAVEGAÇÃO ──────────────────────────────────────────────────────────────
+function voltarParaWelcome(){ document.getElementById('topbar').style.display='none'; document.getElementById('progress-wrap').style.display='none'; document.getElementById('topbar-setor').style.display='none'; showScreen('screen-welcome'); checkDraft(); }
+
+function checkDraft(){ const draft=getDraft(); const wrap=document.getElementById('draft-banner-wrap'); if(draft && draft.data===yesterday && draft.setor){ const sn={cpd:'CPD',front:'Front',back:'Back'}[draft.setor]; wrap.innerHTML=`<div class="draft-banner"><p><strong>Rascunho encontrado</strong>${sn} · ${draft.gerente||'Sem nome'} · ${draft.data}</p><div class="draft-btns"><button class="btn-draft-continuar" onclick="carregarDraft()">Continuar</button><button class="btn-draft-descartar" onclick="descartarDraft()">Descartar</button></div></div>`; } else { wrap.innerHTML=''; } }
+
+function carregarDraft(){ const draft=getDraft(); if(!draft) return; setor=draft.setor; gerente=draft.gerente; respostas=draft.respostas; atual=draft.atual; perguntas=buildPerguntas(setor); setupTopbar(); document.getElementById('progress-wrap').style.display='block'; showScreen('screen-perguntas'); renderPergunta(); }
+function descartarDraft(){ clearDraft(); document.getElementById('draft-banner-wrap').innerHTML=''; }
+
+function setupTopbar(){ document.getElementById('topbar').style.display='flex'; const el=document.getElementById('topbar-setor'); el.style.display='inline-block'; el.textContent=setor.toUpperCase(); el.className=`topbar-setor setor-${setor}`; }
+
+function selecionarSetor(s){ setor=s; setupTopbar(); showScreen('screen-nome'); setTimeout(()=>document.getElementById('input-nome').focus(),200); }
+
+function iniciarPerguntas(){ gerente=document.getElementById('input-nome').value.trim(); perguntas=buildPerguntas(setor); respostas=perguntas.map(()=>({})); atual=0; document.getElementById('progress-wrap').style.display='block'; showScreen('screen-perguntas'); renderPergunta(); }
+
+function renderCampo(c,i,val){
+  if(c.tipo==='status'){ const extra=STATUS_VALS.includes(val)?'':val; return `<div class="campo-wrap"><label class="campo-label">${c.label}</label><div class="quick-btns"><button class="qbtn qbtn-ok${val==='OK'?' active':''}" onclick="setQuick(${i},'OK')">OK</button><button class="qbtn qbtn-falha${val==='FALHA'?' active':''}" onclick="setQuick(${i},'FALHA')">FALHA</button><button class="qbtn qbtn-alerta${val==='ALERTA'?' active':''}" onclick="setQuick(${i},'ALERTA')">ALERTA</button></div><textarea id="campo_${i}" placeholder="Detalhe..." oninput="autoSave()">${extra}</textarea></div>`; }
+  if(c.tipo==='status_sim_nao'){ const extra=STATUS_VALS.includes(val)?'':val; return `<div class="campo-wrap"><label class="campo-label">${c.label}</label><div class="quick-btns"><button class="qbtn qbtn-ok${val==='SIM'?' active':''}" onclick="setQuick(${i},'SIM')">SIM</button><button class="qbtn qbtn-falha${val==='NÃO'?' active':''}" onclick="setQuick(${i},'NÃO')">NÃO</button><button class="qbtn qbtn-na${val==='N/A'?' active':''}" onclick="setQuick(${i},'N/A')">N/A</button></div><textarea id="campo_${i}" placeholder="Complemento..." oninput="autoSave()">${extra}</textarea></div>`; }
+  if(c.tipo==='status_req'){ const extra=STATUS_VALS.includes(val)?'':val; return `<div class="campo-wrap"><label class="campo-label">${c.label}</label><div class="quick-btns"><button class="qbtn qbtn-ok${val==='OK'?' active':''}" onclick="setQuick(${i},'OK')">OK</button><button class="qbtn qbtn-alerta${val==='ATRASO'?' active':''}" onclick="setQuick(${i},'ATRASO')">ATRASO</button><button class="qbtn qbtn-falha${val==='FALHA'?' active':''}" onclick="setQuick(${i},'FALHA')">FALHA</button></div><textarea id="campo_${i}" placeholder="Complemento..." oninput="autoSave()">${extra}</textarea></div>`; }
+  return `<div class="campo-wrap"><label class="campo-label">${c.label}</label><textarea id="campo_${i}" placeholder="Sem ocorrência" oninput="autoSave()">${val||''}</textarea></div>`;
 }
 
 function renderPergunta(){
-  const p=perguntas[atual];
-  const pct=Math.round((atual/perguntas.length)*100);
+  const p=perguntas[atual]; const pct=Math.round((atual/perguntas.length)*100);
   document.getElementById('progress-fill').style.width=pct+'%';
   document.getElementById('prog-label').textContent=`${atual+1} / ${perguntas.length} — ${p.secao}`;
   document.getElementById('prog-pct').textContent=pct+'%';
   const badgeHTML=p.badge?`<span class="badge badge-${p.badge==='OK'?'ok':'alerta'}">${p.badge}</span>`:'';
-  document.getElementById('q-content').innerHTML=`<div class="q-card">
-    <div class="q-secao">${p.num}. ${p.secao} ${badgeHTML}</div>
-    <div class="q-pergunta">${p.pergunta}</div>
-    ${p.campos.map((c,i)=>renderCampo(c,i,respostas[atual][i]||'')).join('')}
-  </div>`;
-  document.getElementById('nav-buttons').innerHTML=`
-    ${atual>0?`<button class="btn btn-back" onclick="voltar()">← Voltar</button>`:''}
-    <button class="btn-skip" onclick="pular()">Pular</button>
-    <button class="btn btn-next" onclick="avancar()">${atual<perguntas.length-1?'Próximo →':'Revisar →'}</button>`;
+  document.getElementById('q-content').innerHTML=`<div class="q-card"><div class="q-secao">${p.num}. ${p.secao} ${badgeHTML}</div><div class="q-pergunta">${p.pergunta}</div>${p.campos.map((c,i)=>renderCampo(c,i,respostas[atual][i]||'')).join('')}</div>`;
+  document.getElementById('nav-buttons').innerHTML=`${atual>0?`<button class="btn btn-back" onclick="voltar()">← Voltar</button>`:''}<button class="btn-skip" onclick="pular()">Pular</button><button class="btn btn-next" onclick="avancar()">${atual<perguntas.length-1?'Próximo →':'Revisar →'}</button>`;
 }
 
-function setQuick(i, val){
-  salvarAtual();
-  respostas[atual][i]=val;
-  renderPergunta();
-  autoSave();
-}
+function setQuick(i,val){ salvarAtual(); respostas[atual][i]=val; renderPergunta(); autoSave(); }
 
-function salvarAtual(){
-  perguntas[atual].campos.forEach((c,i)=>{
-    const el=document.getElementById('campo_'+i); if(!el) return;
-    const base=respostas[atual][i];
-    const extra=el.value.trim();
-    if(STATUS_VALS.includes(base)){
-      respostas[atual][i]=extra?`${base} — ${extra}`:base;
-    } else {
-      respostas[atual][i]=extra;
-    }
-  });
-}
+function salvarAtual(){ perguntas[atual].campos.forEach((c,i)=>{ const el=document.getElementById('campo_'+i); if(!el) return; const base=respostas[atual][i]; const extra=el.value.trim(); if(STATUS_VALS.includes(base)){ respostas[atual][i]=extra?`${base} — ${extra}`:base; } else { respostas[atual][i]=extra; } }); }
 
 function autoSave(){ clearTimeout(autosaveTimer); autosaveTimer=setTimeout(()=>{ salvarAtual(); saveDraft(); },1200); }
 
@@ -440,15 +458,8 @@ function voltarDoResumo(){ atual=perguntas.length-1; showScreen('screen-pergunta
 
 function mostrarResumo(){
   const sn={cpd:'CPD',front:'Front',back:'Back'}[setor];
-  document.getElementById('resumo-lista').innerHTML=`<div class="summary-card">
-    <div class="summary-setor-header">${sn} · ${gerente||'Sem nome'} · Ref.: ${yesterday}</div>
-    ${perguntas.map((p,idx)=>{
-      const vals=Object.values(respostas[idx]).filter(v=>v);
-      const texto=vals.join('\n')||null;
-      return `<div class="summary-item"><div class="summary-label">${p.num}. ${p.secao}</div>
-        <div class="summary-value ${!texto?'vazio':''}">${texto||'Sem ocorrência'}</div></div>`;
-    }).join('')}
-  </div>`;
+  renderScorePreview();
+  document.getElementById('resumo-lista').innerHTML=`<div class="summary-card"><div class="summary-setor-header">${sn} · ${gerente||'Sem nome'} · Ref.: ${yesterday}</div>${perguntas.map((p,idx)=>{ const vals=Object.values(respostas[idx]).filter(v=>v); const texto=vals.join('\n')||null; return `<div class="summary-item"><div class="summary-label">${p.num}. ${p.secao}</div><div class="summary-value ${!texto?'vazio':''}">${texto||'Sem ocorrência'}</div></div>`; }).join('')}</div>`;
   showScreen('screen-resumo');
   document.getElementById('progress-fill').style.width='100%';
   document.getElementById('prog-label').textContent='Revisão completa';
@@ -456,37 +467,55 @@ function mostrarResumo(){
   window.scrollTo(0,0);
 }
 
+// ── PDF ────────────────────────────────────────────────────────────────────
 function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); }
-function badgePDF(b){ if(!b) return ''; const cls=b==='OK'?'pdf-badge-ok':'pdf-badge-alerta'; return `<span class="pdf-sec-badge ${cls}">${b}</span>`; }
+function badgePDF(b){ if(!b) return ''; const cls=b==='OK'?'pdf-badge-ok':b==='ALERTA'?'pdf-badge-alerta':'pdf-badge-falha'; return `<span class="pdf-sec-badge ${cls}">${b}</span>`; }
 
 function gerarPDF(){
   const sn={cpd:'CPD',front:'Front',back:'Back'}[setor];
+  const {score,cls,label,msg,detalhes} = calcScore();
+
+  // Status badge class
+  const statusCls = `pdf-status-${cls}`;
+
   const sections=perguntas.map((p,idx)=>{
     const campos=p.campos.map((c,i)=>{ const v=respostas[idx][i]; if(!v) return ''; return `<div class="pdf-field"><div class="pdf-field-label">${c.label}</div><div>${esc(v)}</div></div><div class="pdf-divider"></div>`; }).join('');
     const isEmpty=!Object.values(respostas[idx]).some(v=>v);
-    return `<div class="pdf-section"><div class="pdf-sec-header"><div class="pdf-sec-stripe"></div><div class="pdf-sec-title">${p.num}. ${p.secao}</div>${badgePDF(p.badge)}</div>
-      <div class="pdf-content ${isEmpty?'vazio':''}">${isEmpty?'Sem ocorrência':campos}</div></div>`;
+    return `<div class="pdf-section"><div class="pdf-sec-header"><div class="pdf-sec-stripe"></div><div class="pdf-sec-title">${p.num}. ${p.secao}</div>${badgePDF(p.badge)}</div><div class="pdf-content ${isEmpty?'vazio':''}">${isEmpty?'Sem ocorrência':campos}</div></div>`;
   }).join('');
+
+  const scoreRows = '';
+
   document.getElementById('pdf-page').innerHTML=`
-    <div class="pdf-header"><div class="pdf-header-stripe"></div><div class="pdf-header-body">
-      <div class="pdf-header-title">GRUPO CAJUPAR · COBRANÇA DIÁRIA GERENTES</div>
-      <div class="pdf-header-sub">Setor: ${sn} &nbsp;·&nbsp; Referente a: ${yesterday} &nbsp;·&nbsp; Gerado em: ${today}</div>
-    </div></div>
+    <div class="pdf-header">
+      <div class="pdf-header-stripe"></div>
+      <div class="pdf-header-body">
+        <div class="pdf-header-title">GRUPO CAJUPAR · COBRANÇA DIÁRIA GERENTES</div>
+        <div class="pdf-header-sub">Setor: ${sn} &nbsp;·&nbsp; Referente a: ${yesterday} &nbsp;·&nbsp; Gerado em: ${today}</div>
+      </div>
+    </div>
     <div class="pdf-redline"></div>
+    <div class="pdf-status-bar">
+      <span class="pdf-status-label">Status geral:</span>
+      <span class="pdf-status-badge ${statusCls}">${label}</span>
+    </div>
     <div class="pdf-gerente"><span>Gerente: ${esc(gerente)||'—'}</span><span>Setor: ${sn}</span></div>
     ${sections}
+    <div class="pdf-score-section">
+      <div class="pdf-score-header"><div class="pdf-score-header-title">Nota Final da Operação</div></div>
+      <div class="pdf-score-body">
+        <div class="pdf-score-circle ${cls}">${score}%</div>
+        <div class="pdf-score-status ${cls}">${label}</div>
+        <div class="pdf-score-msg">${msg}</div>
+      </div>
+    </div>
     <div class="pdf-footer"><span>GRUPO CAJUPAR · DOCUMENTO INTERNO · USO RESTRITO</span><span>Gerado em ${today}</span></div>`;
+
   clearDraft();
   setTimeout(()=>window.print(),300);
 }
 
-function novoRelatorio(){
-  clearDraft(); setor=null; gerente=''; perguntas=[]; atual=0; respostas=[];
-  document.getElementById('topbar').style.display='none';
-  document.getElementById('progress-wrap').style.display='none';
-  document.getElementById('topbar-setor').style.display='none';
-  showScreen('screen-welcome'); checkDraft(); window.scrollTo(0,0);
-}
+function novoRelatorio(){ clearDraft(); setor=null; gerente=''; perguntas=[]; atual=0; respostas=[]; document.getElementById('topbar').style.display='none'; document.getElementById('progress-wrap').style.display='none'; document.getElementById('topbar-setor').style.display='none'; showScreen('screen-welcome'); checkDraft(); window.scrollTo(0,0); }
 
 checkDraft();
 </script>

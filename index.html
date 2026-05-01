@@ -100,6 +100,8 @@ textarea:focus { outline: none; border-color: var(--orange); background: #FFFDF9
 .btn-next { background: var(--orange); color: #fff; }
 .btn-back { background: #fff; color: var(--muted); border: 1px solid var(--border); }
 .btn-skip { font-size: 12px; color: var(--muted); background: none; border: none; cursor: pointer; margin-left: auto; font-family: 'IBM Plex Sans', sans-serif; padding: 4px; }
+.campo-obrigatorio { font-size: 11px; color: var(--red); font-family: 'IBM Plex Mono', monospace; margin-top: 6px; padding: 6px 10px; background: #FDEDEC; border-radius: 4px; border-left: 3px solid var(--red); display: none; }
+.campo-obrigatorio.visivel { display: block; }
 
 .summary-card { background: var(--white); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 1rem; }
 .summary-setor-header { background: var(--black); padding: 8px 14px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; color: var(--orange); letter-spacing: 0.1em; text-transform: uppercase; }
@@ -318,13 +320,13 @@ const PESOS = {
 
 // ── PERGUNTAS ──────────────────────────────────────────────────────────────
 const COMUNS = [
-  { id:'pop', num:'5', secao:'POP / Operação', badge:'ALERTA', pergunta:'O POP bateu? Se não, onde falhou?',
+  { id:'pop', num:'5', secao:'POP / Operação', badge:'ALERTA', pergunta:'O POP bateu? Se não, onde falhou?', obrigatorio:0,
     campos:[{label:'Status',tipo:'status'},{label:'Onde falhou',tipo:'textarea'},{label:'Motivo',tipo:'textarea'}] },
   { id:'equipe', num:'6', secao:'Equipe (Faltas / Atrasos)', badge:'ALERTA', pergunta:'Teve falta não prevista ou atraso? Qual impacto e o que foi feito?',
     campos:[{label:'Ocorrência',tipo:'textarea'},{label:'Impacto',tipo:'textarea'},{label:'Ação tomada',tipo:'textarea'}] },
-  { id:'gestao', num:'7', secao:'Gestão D-1', badge:null, pergunta:'Seguiu o processo de gestão D-1 e confirmou a presença dos funcionários e freelancers para hoje?',
+  { id:'gestao', num:'7', secao:'Gestão D-1', badge:null, pergunta:'Seguiu o processo de gestão D-1 e confirmou a presença dos funcionários e freelancers para hoje?', obrigatorio:0,
     campos:[{label:'Processo D-1 realizado?',tipo:'status_sim_nao'},{label:'Total de funcionários escalados para hoje',tipo:'textarea'},{label:'Alguma falta era previsível? Houve falha de gestão?',tipo:'textarea'},{label:'Ajuste feito',tipo:'textarea'}] },
-  { id:'checklist', num:'12', secao:'Checklist', badge:'ALERTA', pergunta:'Todos os checklists foram feitos corretamente?',
+  { id:'checklist', num:'12', secao:'Checklist', badge:'ALERTA', pergunta:'Todos os checklists foram feitos corretamente?', obrigatorio:0,
     campos:[{label:'Status',tipo:'status'},{label:'Quais não foram feitos',tipo:'textarea'},{label:'Motivo',tipo:'textarea'}] },
   { id:'tatico', num:'14', secao:'Plano Tático', badge:'OK', pergunta:'Qual a prioridade número 1 da operação hoje?',
     campos:[{label:'Prioridade',tipo:'textarea'},{label:'Foco da equipe',tipo:'textarea'}] },
@@ -334,7 +336,7 @@ const COMUNS = [
 
 const ESPECIFICAS = {
   cpd: [
-    { id:'requisicao', num:'8', secao:'Requisição (CPD / Operação)', badge:'ALERTA', pergunta:'A requisição foi entregue no horário? Faltou algo?',
+    { id:'requisicao', num:'8', secao:'Requisição (CPD / Operação)', badge:'ALERTA', pergunta:'A requisição foi entregue no horário? Faltou algo?', obrigatorio:0,
       campos:[{label:'Status',tipo:'status_req'},{label:'Itens faltantes',tipo:'textarea'},{label:'Motivo',tipo:'textarea'}] },
     { id:'plano_req', num:'9', secao:'Plano de Ação – Requisição', badge:null, pergunta:'O que foi feito para corrigir e evitar recorrência?',
       campos:[{label:'Ação imediata',tipo:'textarea'},{label:'Ação preventiva',tipo:'textarea'},{label:'Responsável',tipo:'textarea'}] },
@@ -348,7 +350,7 @@ const ESPECIFICAS = {
       campos:[{label:'Emergencial (sim/não – qual?)',tipo:'textarea'},{label:'Preventiva (OK/ATRASADA)',tipo:'status'},{label:'Motivo',tipo:'textarea'}] }
   ],
   back: [
-    { id:'requisicao', num:'8', secao:'Requisição (CPD / Operação)', badge:'ALERTA', pergunta:'A requisição foi entregue no horário? Faltou algo?',
+    { id:'requisicao', num:'8', secao:'Requisição (CPD / Operação)', badge:'ALERTA', pergunta:'A requisição foi entregue no horário? Faltou algo?', obrigatorio:0,
       campos:[{label:'Status',tipo:'status_req'},{label:'Itens faltantes',tipo:'textarea'},{label:'Motivo',tipo:'textarea'}] },
     { id:'plano_req', num:'9', secao:'Plano de Ação – Requisição', badge:null, pergunta:'O que foi feito para corrigir e evitar recorrência?',
       campos:[{label:'Ação imediata',tipo:'textarea'},{label:'Ação preventiva',tipo:'textarea'},{label:'Responsável',tipo:'textarea'}] },
@@ -441,8 +443,12 @@ function renderPergunta(){
   document.getElementById('prog-label').textContent=`${atual+1} / ${perguntas.length} — ${p.secao}`;
   document.getElementById('prog-pct').textContent=pct+'%';
   const badgeHTML=p.badge?`<span class="badge badge-${p.badge==='OK'?'ok':'alerta'}">${p.badge}</span>`:'';
-  document.getElementById('q-content').innerHTML=`<div class="q-card"><div class="q-secao">${p.num}. ${p.secao} ${badgeHTML}</div><div class="q-pergunta">${p.pergunta}</div>${p.campos.map((c,i)=>renderCampo(c,i,respostas[atual][i]||'')).join('')}</div>`;
-  document.getElementById('nav-buttons').innerHTML=`${atual>0?`<button class="btn btn-back" onclick="voltar()">← Voltar</button>`:''}<button class="btn-skip" onclick="pular()">Pular</button><button class="btn btn-next" onclick="avancar()">${atual<perguntas.length-1?'Próximo →':'Revisar →'}</button>`;
+  const obrigLabel = p.obrigatorio !== undefined ? '<div style="font-size:10px;color:var(--orange);font-family:IBM Plex Mono,monospace;margin-bottom:8px;letter-spacing:0.06em;">* CAMPO OBRIGATÓRIO</div>' : '';
+  document.getElementById('q-content').innerHTML=`<div class="q-card"><div class="q-secao">${p.num}. ${p.secao} ${badgeHTML}</div><div class="q-pergunta">${p.pergunta}</div>${obrigLabel}${p.campos.map((c,i)=>renderCampo(c,i,respostas[atual][i]||'')).join('')}</div><div class="campo-obrigatorio" id="validacao-msg"></div>`;
+  const p_atual = perguntas[atual];
+  const isObrigatorio = p_atual.obrigatorio !== undefined;
+  const skipBtn = isObrigatorio ? '' : `<button class="btn-skip" onclick="pular()">Pular</button>`;
+  document.getElementById('nav-buttons').innerHTML=`${atual>0?`<button class="btn btn-back" onclick="voltar()">← Voltar</button>`:''} ${skipBtn} <button class="btn btn-next" onclick="avancar()">${atual<perguntas.length-1?'Próximo →':'Revisar →'}</button>`;
 }
 
 function setQuick(i,val){ salvarAtual(); respostas[atual][i]=val; renderPergunta(); autoSave(); }
@@ -451,7 +457,22 @@ function salvarAtual(){ perguntas[atual].campos.forEach((c,i)=>{ const el=docume
 
 function autoSave(){ clearTimeout(autosaveTimer); autosaveTimer=setTimeout(()=>{ salvarAtual(); saveDraft(); },1200); }
 
-function avancar(){ salvarAtual(); saveDraft(); if(atual<perguntas.length-1){ atual++; renderPergunta(); window.scrollTo(0,0); } else { mostrarResumo(); } }
+function validarObrigatorio() {
+  const p = perguntas[atual];
+  if (p.obrigatorio === undefined) return true;
+  const val = respostas[atual][p.obrigatorio];
+  const STATUS_OK = ['OK','FALHA','ALERTA','SIM','NÃO','N/A','ATRASO'];
+  const preenchido = val && STATUS_OK.some(s => val === s || (val && val.startsWith && val.startsWith(s)));
+  const el = document.getElementById('validacao-msg');
+  if (!preenchido) {
+    if (el) { el.classList.add('visivel'); el.textContent = '⚠ Campo obrigatório — selecione uma opção antes de avançar.'; }
+    return false;
+  }
+  if (el) el.classList.remove('visivel');
+  return true;
+}
+
+function avancar(){ if(!validarObrigatorio()) return; salvarAtual(); saveDraft(); if(atual<perguntas.length-1){ atual++; renderPergunta(); window.scrollTo(0,0); } else { mostrarResumo(); } }
 function voltar(){ salvarAtual(); if(atual>0){ atual--; renderPergunta(); window.scrollTo(0,0); } }
 function pular(){ respostas[atual]={}; saveDraft(); if(atual<perguntas.length-1){ atual++; renderPergunta(); window.scrollTo(0,0); } else { mostrarResumo(); } }
 function voltarDoResumo(){ atual=perguntas.length-1; showScreen('screen-perguntas'); renderPergunta(); window.scrollTo(0,0); }
